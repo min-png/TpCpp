@@ -160,7 +160,7 @@ test.Set_Noun("ach.txt");
 test.Set_Mode("r+");
 test.Set_Len(5);
 test.openFile();
-test.Lire(false);
+//test.Lire(false);
 test.Ecrire("new word /n",true); 
 //cout<<test.Lire();//probleme du curseur;
 //new.name="hammadi"
