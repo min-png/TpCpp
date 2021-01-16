@@ -1,12 +1,19 @@
 #include<iostream>
 //#include"fichier.hpp"
 #include<string>
+#include <string.h>
 #include<stdlib.h>
 #include<stdio.h>
 using namespace std;
 class fichier
 {
-private: 
+private:
+const char w[2]="w";
+const char wp[3]="w+";
+const char r[2]="r";
+const char rp[3]="r+";
+const char a[2]="a";
+
 char* Name;
 char* Mode;
 unsigned int size_len ;
@@ -24,7 +31,7 @@ public:
     char*  Get_Mode();
     unsigned int Get_len();
 
-    void Ecrire(char*);
+    void Ecrire(string);
     void lire();
     friend char * str_c(string);
 };
@@ -88,15 +95,35 @@ void fichier::Set_Len(unsigned int num){
 this->size_len=num;
 }
 
-int main(){
-    
-fichier test("test.txt","r+",10);
+void fichier::Ecrire(string key)
+{
+int result=strcmp(this->Name,wp);
+int result1=strcmp(this->Name,w);
+ if(!( (result==0)||(result1==0) ) )
+  cout<< "erreur de mode d'ecriture";
+ else
+ {
+    this->fd=fopen(this->Name,this->Mode);
+    if (!(this->fd=__null))
+    {
+     char* s= new char [sizeof size_len];
+     s =str_c(key);
+     fprintf(fd,"%-*.*s",size_len,size_len,s);
+    }
+    else
+     cout<<"erreur de poiteur sur discripteur fichier";
+ }
+  
+}
 
+int main(){
+
+fichier test("test.txt","r+",10);
+test.Ecrire("1234567891011");
 // fichier test;
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
 //  test.Set_Len(5);
 //  cout<<test.Get_Mode()   <<"mode    "<<test.Get_Noun()<<"noun   "<<test.Get_len()<<"length";
 //   return 0 ;
-
 }
