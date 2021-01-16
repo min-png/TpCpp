@@ -96,30 +96,37 @@ this->size_len=num;
 }
 
 void fichier::Ecrire(string key)
-{
-int result=strcmp(this->Name,wp);
-int result1=strcmp(this->Name,w);
+{ 
+int result=strcmp(wp,this->Mode);
+int result1=strcmp(this->Mode,w);
  if(!( (result==0)||(result1==0) ) )
-  cout<< "erreur de mode d'ecriture";
+  cout<< "erreur de mode d'ecriture"<<"\n";// avec w "<<result1<<w<<"\n avec wp "<<result<<wp << "  our suspect"<<this->Name;
  else
- {
+ {  cout<<"hi there \n";
     this->fd=fopen(this->Name,this->Mode);
-    if (!(this->fd=__null))
+    
+    if (!(this->fd==__null))
     {
      char* s= new char [sizeof size_len];
      s =str_c(key);
-     fprintf(fd,"%-*.*s",size_len,size_len,s);
+     cout<<fd;
+     puts(s);
+     for (int i=0 ; i<size_len; i++)
+     {
+     fputc(s[i],this->fd);    
+     }
+     //fprintf(fd,"%-*.*s",size_len,size_len,s);
     }
     else
-     cout<<"erreur de poiteur sur discripteur fichier";
+     cout<<" erreur de poiteur sur discripteur fichier";
  }
   
 }
 
 int main(){
 
-fichier test("test.txt","r+",10);
-test.Ecrire("1234567891011");
+fichier test("test.txt","w",10);
+test.Ecrire("+++++++++kkkkkkkkk");
 // fichier test;
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
