@@ -32,7 +32,10 @@ public:
     unsigned int Get_len();
 
     void Ecrire(string);
-    void lire();
+    void Lire();
+    void charger();
+
+    friend void afficher(FILE);
     friend char * str_c(string);
 };
 
@@ -42,6 +45,15 @@ char* cha = new char[s.size() + 1];
 std::copy(s.begin(), s.end(), cha);
 cha[s.size()] = '\0';
 return cha;
+}
+void afficher(FILE *fd)
+{
+    char c= fgetc(fd);
+    while (!(c==EOF))
+    {
+     putchar(c);
+     c=fgetc(fd);
+    }
 }
 
 fichier::fichier(/* args */)
@@ -67,8 +79,9 @@ this->size_len=size;
 
 fichier::~fichier()
 {
-cout<<"\n bye bye";
-//fclose(this->fd);
+if (!(this->fd==__null))
+    fclose(this->fd);
+cout<<"\nbye bye";
 }
 //Getters###
 unsigned int fichier::Get_len(){
@@ -94,6 +107,8 @@ void fichier::Set_Mode(string mod)
 void fichier::Set_Len(unsigned int num){
 this->size_len=num;
 }
+
+// #### modifiers #######
 
 void fichier::Ecrire(string key)
 { 
@@ -123,14 +138,44 @@ int result1=strcmp(this->Mode,w);
   
 }
 
+void fichier::Lire()
+{
+int result1=strcmp(rp,this->Mode);
+int result=strcmp(r,this->Mode);
+if(!( (result==0)||(result1==0) ) )
+    cout<< "erreur de mode de lecture "<<"\n";
+else 
+{
+    if (this->fd==__null)
+    this->fd=fopen(this->Name,this->Mode);
+//cout<<fd;
+fseek(this->fd,0,SEEK_CUR);
+cout<<"\n";
+afficher(this->fd);
+} 
+}
+
+void fichier::charger()
+{
+fichier::Set_Mode("r");
+if (this->fd==__null)
+    this->fd=fopen(this->Name,this->Mode);
+fseek(this->fd,0,SEEK_SET);
+cout<<"\nFile : "<<Name<<" size_len="<<size_len<<endl;
+afficher(this->fd);
+}
 int main(){
 
-fichier test("test.txt","w",10);
-test.Ecrire("+++++++++kkkkkkkkk");
+fichier test("test.txt","r+",10);
+//test.Ecrire("+++++++++kkkkkkkkk");
+test.Lire();
+test.charger();
 // fichier test;
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
 //  test.Set_Len(5);
 //  cout<<test.Get_Mode()   <<"mode    "<<test.Get_Noun()<<"noun   "<<test.Get_len()<<"length";
 //   return 0 ;
+// char c[5]="+++c";
+// cout<<c;
 }
