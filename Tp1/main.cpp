@@ -32,11 +32,13 @@ public:
     unsigned int Get_len();
 
     void Ecrire(string);
-    void Lire();
+    char* Lire();
     void charger();
 
     friend void afficher(FILE);
     friend char * str_c(string);
+    // friend fichier& operator+(fichier,fichier);
+    // fichier& operator=(fichier);
 };
 
 char* str_c(string s)
@@ -56,14 +58,43 @@ void afficher(FILE *fd)
     }
 }
 
-fichier::fichier(/* args */)
+// fichier& fichier::operator=(fichier f){
+// this->Set_Noun(f.Name);
+// this->Set_Mode(f.Mode);
+// this->Set_Len(f.size_len);
+// this->fd=f.fd;
+// }
+
+// fichier& operator+(fichier f,fichier g)
+// {
+// fichier h;
+// int len=strlen(f.Name)-5;//5=sizeof ('txt')
+// char *c = new char[len+strlen(g.Name)];
+// for(size_t i=0;i<len;i++)
+// {
+// c[i]=f.Name[i];
+// }
+// c[len]='\0';
+// strcat(c,g.Name);
+// strcpy(h.Name,c);
+// free(c);
+// h.Mode="r+";
+// h.size_len=f.size_len+g.size_len;
+// cout<<"\nFile : "<<h.Name<<" size_len="<<h.size_len<<endl;
+// afficher(f.fd);
+// afficher(g.fd);
+// return h;
+// }
+
+fichier::fichier()
 {
- this->Name=new char[1];
- Name='\0';
- this->Mode=new char[1];
- Mode='\0';
+this->size_len=0;
+this->Name= str_c("");
+this->Mode = str_c("");
+
+// *this->Mode='\0';
  this->fd=NULL;
- cout<<"construction par defaut";
+  cout<<"construction par defaut";
 }
 
  fichier::fichier(string name,string mod  ,unsigned int size)
@@ -73,6 +104,8 @@ this->Name = str_c(name);
 this->Mode = str_c(mod);
 this->size_len=size;
   cout<<"construction specifique";
+ this->fd=NULL;
+
 // this->fd=fopen(Name,Mode);
 // cout<<fd;
 }
@@ -138,7 +171,7 @@ int result1=strcmp(this->Mode,w);
   
 }
 
-void fichier::Lire()
+char* fichier::Lire()
 {
 int result1=strcmp(rp,this->Mode);
 int result=strcmp(r,this->Mode);
@@ -152,6 +185,7 @@ else
 fseek(this->fd,0,SEEK_CUR);
 cout<<"\n";
 afficher(this->fd);
+
 } 
 }
 
@@ -170,6 +204,8 @@ fichier test("test.txt","r+",10);
 //test.Ecrire("+++++++++kkkkkkkkk");
 test.Lire();
 test.charger();
+fichier f;
+//f=test;
 // fichier test;
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
