@@ -37,8 +37,8 @@ public:
 
     friend void afficher(FILE);
     friend char * str_c(string);
-    // friend fichier& operator+(fichier,fichier);
-    // fichier& operator=(fichier);
+    fichier& operator+(fichier&);
+    fichier& operator=(fichier&);
 };
 
 char* str_c(string s)
@@ -58,33 +58,45 @@ void afficher(FILE *fd)
     }
 }
 
-// fichier& fichier::operator=(fichier f){
-// this->Set_Noun(f.Name);
-// this->Set_Mode(f.Mode);
-// this->Set_Len(f.size_len);
-// this->fd=f.fd;
-// }
-
-// fichier& operator+(fichier f,fichier g)
-// {
-// fichier h;
-// int len=strlen(f.Name)-5;//5=sizeof ('txt')
-// char *c = new char[len+strlen(g.Name)];
-// for(size_t i=0;i<len;i++)
-// {
-// c[i]=f.Name[i];
-// }
-// c[len]='\0';
-// strcat(c,g.Name);
-// strcpy(h.Name,c);
-// free(c);
-// h.Mode="r+";
-// h.size_len=f.size_len+g.size_len;
-// cout<<"\nFile : "<<h.Name<<" size_len="<<h.size_len<<endl;
-// afficher(f.fd);
-// afficher(g.fd);
-// return h;
-// }
+fichier& fichier::operator=(fichier & f){
+ this->Set_Noun(f.Get_Noun());
+ this->Set_Mode(f.Get_Mode());
+ this->Set_Len(f.Get_len());
+ this->fd=f.fd;
+ return *this;
+ }
+ fichier& fichier::operator+(fichier& f1)
+ {
+    fichier *f=new fichier;
+     f->Set_Len(f1.Get_len()+this->Get_len());
+     f->Set_Mode(f1.Get_Mode());
+     f->Set_Noun(str_c("test.txt"));
+     f->fd=fopen(f->Get_Noun(),f->Get_Mode());
+     
+     return *f;
+ }
+//  fichier& operator+(fichier& f,fichier &g)
+//  {
+//      fichier *h=new fichier ;
+     
+//  fichier h;
+//  int len=strlen(f->Name)-5;//5=sizeof ('txt')
+//  char *c = new char[len+strlen(g.Name)];
+//  for(size_t i=0;i<len;i++)
+//  {
+//  c[i]=f.Name[i];
+//  }
+//  c[len]='\0';
+//  strcat(c.g.Name);
+//  strcpy(h.Name,c);
+//  free(c);
+//  h.Mode="r+";
+//  h.size_len=f.size_len+g.size_len;
+//  cout<<"\nFile : "<<h.Name<<" size_len="<<h.size_len<<endl;
+//  afficher(f.fd);
+//  afficher(g.fd);
+//  return h;
+ //}
 
 fichier::fichier()
 {
@@ -204,9 +216,12 @@ fichier test("test.txt","r+",10);
 //test.Ecrire("+++++++++kkkkkkkkk");
 test.Lire();
 test.charger();
-fichier f;
+fichier f("hmid.txt","w+",5);
 //f=test;
-// fichier test;
+f.charger();
+ fichier baba;
+ baba=test+f;
+ cout<<baba.Get_len();
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
 //  test.Set_Len(5);
