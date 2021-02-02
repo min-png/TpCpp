@@ -7,7 +7,7 @@
 using namespace std;
 class fichier
 {
-private:
+public:
 const char w[2]="w";
 const char wp[3]="w+";
 const char r[2]="r";
@@ -18,7 +18,7 @@ char* Name;
 char* Mode;
 unsigned int size_len ;
 FILE *fd; 
-public:
+//public:
     fichier(/* args */);
     fichier(string,string,unsigned int);
     ~fichier();
@@ -32,14 +32,34 @@ public:
     unsigned int Get_len();
 
     void Ecrire(string);
-    char* Lire();
+    void Lire();
     void charger();
 
     friend void afficher(FILE);
+    friend string getText(FILE,unsigned int);
     friend char * str_c(string);
     fichier& operator+(fichier&);
     fichier& operator=(fichier&);
 };
+
+char* getText(FILE *fd,unsigned int  i)
+{
+    char *result=new char[sizeof i];
+    char c;
+    c=fgetc(fd);
+    int j=0;
+    while (!(c==EOF)&& (j<i))
+    {
+     *(result+j)=c;
+      c=fgetc(fd);
+      j++;
+    }
+    //result[j]='\0';
+    string final;
+    final=result;
+    return result;
+}
+
 
 char* str_c(string s)
 {
@@ -69,10 +89,10 @@ fichier& fichier::operator=(fichier & f){
  {
     fichier *f=new fichier;
      f->Set_Len(f1.Get_len()+this->Get_len());
-     f->Set_Mode(f1.Get_Mode());
-     f->Set_Noun(str_c("test.txt"));
+     f->Set_Mode(wp);
+     f->Set_Noun(str_c("hello.txt"));
      f->fd=fopen(f->Get_Noun(),f->Get_Mode());
-     
+     f->Ecrire(getText(f1.fd,f1.size_len));
      return *f;
  }
 //  fichier& operator+(fichier& f,fichier &g)
@@ -155,7 +175,7 @@ this->size_len=num;
 
 // #### modifiers #######
 
-void fichier::Ecrire(string key)
+void fichier::Ecrire( string key)
 { 
 int result=strcmp(wp,this->Mode);
 int result1=strcmp(this->Mode,w);
@@ -183,7 +203,7 @@ int result1=strcmp(this->Mode,w);
   
 }
 
-char* fichier::Lire()
+void fichier::Lire()
 {
 int result1=strcmp(rp,this->Mode);
 int result=strcmp(r,this->Mode);
@@ -210,18 +230,25 @@ fseek(this->fd,0,SEEK_SET);
 cout<<"\nFile : "<<Name<<" size_len="<<size_len<<endl;
 afficher(this->fd);
 }
+
+
+
 int main(){
 
 fichier test("test.txt","r+",10);
-//test.Ecrire("+++++++++kkkkkkkkk");
-test.Lire();
+test.Set_Mode("w");
+////write only ammount speccified in size_len var
+//test.Lire();
 test.charger();
 fichier f("hmid.txt","w+",5);
+f.Ecrire("ba3bddddddddda5");
 //f=test;
 f.charger();
- fichier baba;
- baba=test+f;
- cout<<baba.Get_len();
+cout<<getText(f.fd,f.size_len)<<endl;
+//  fichier baba;
+//  baba=test+f;
+//  cout<<baba.Get_Mode()<<endl;
+//  baba.charger();
 //  test.Set_Noun("ach.txt");
 //  test.Set_Mode("r+");
 //  test.Set_Len(5);
